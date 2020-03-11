@@ -1,0 +1,132 @@
+---
+title: "Homework 4"
+author: "Kim Ayers"
+date: ""
+header_includes:
+- \usepackage{amsmath}
+- \usepackage{amssymb}
+- \usepackage{amsthm}
+output: 
+  html_document:
+    theme: readable
+    highlight: haddock
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval=TRUE, message=FALSE, warning=FALSE, cache=TRUE)
+library(tidyverse)
+library(boot)
+library(caret)
+library(ISLR)
+```
+# Problem 1
+Load the Auto data set from the `ISLR` package. filter the data so that we only have cars with origin “1” (US). Then remove the columns `name` and `origin`. There are several nonlinear relationships in this data that we should explore. In particular, let’s build models for `displacement` ~ `mpg` and `horsepower` ~ `weight`. Build polynomial and basis-based regression models for each. Use Gaussian functions as your basis in each basis-based model. For the polynomial functions use cross validation to determine which polynomial order is best. For the basis-based models use cross validation to determine the best spread and number of the Gaussian functions. Be sure to report your cross validation error for each model. Conclude each model by choosing the best of the modeling techniques and creating a visual of your final model.
+
+```{r}
+rm(list=ls())
+AutoData<-Auto%>%
+  filter(origin==1)%>%
+  select(-name)%>%
+  select(-origin)
+
+cv_data<-data.frame(mpg=rep(0,10),
+                    CV=rep(0,10))
+j<-1
+for(mpgdeg in 1:10){
+  model<-glm(displacement~poly(mpg,degree=mpgdeg),
+                  data=AutoData
+                   )
+  cv_data$mpg[j]<-mpgdeg
+  billy<-cv.glm(AutoData,model,K=10)
+  cv_data$CV[j]<-billy$delta[1]
+  j=j+1
+
+}
+cv_data<-cv_data%>%
+  arrange(
+    CV
+  )
+
+ggplot(data=cv_data,aes(x=mpg,y=CV))+
+  geom_line()
+
+final_model<-glm(displacement~poly(mpg,degree=5),data=AutoData)
+
+AutoData<-AutoData %>%
+  mutate(
+    Predictions = predict.glm(final_model, newdata=AutoData)
+  )
+
+ggplot(data=AutoData,aes(x=mpg,y=displacement))+
+  geom_point()+
+  geom_line(aes(y=Predictions),color="red")
+```
+```{r}
+rm(list=ls())
+AutoData<-Auto%>%
+  filter(origin==1)%>%
+  select(-name)%>%
+  select(-origin)
+gauss<-function(x,center,spread){
+  return(1/(sqrt(2*pi)*spread)*exp(-(x-center)^2/(2*spread^2)))
+}
+#####################
+smallcv<-10000
+cv_data<-c()
+for(k in 1:40){
+  myCenters<-seq(0,40,by=k)
+  for(Spread in 1:30){
+
+    AutoData<-Auto%>%
+      filter(origin==1)%>%
+      select(-name)%>%
+      select(-origin)
+
+    for(j in 1:length(myCenters)){
+        AutoData[,j+7]<-sapply(AutoData$mpg ,
+                                myCenters[j],
+                                Spread,
+                              FUN = gauss)
+        }
+
+    model<-glm(displacement~.-(mpg:year),data=AutoData)
+    CV<-cv.glm(AutoData,model,K=10)$delta[1]
+    cv_data<-append(cv_data,CV)
+    if (CV<smallcv){
+      smallcv<-CV
+      mincenter<-myCenters
+      minspread<-Spread
+    }
+  }
+}
+#########################
+
+AutoData<-Auto%>%
+  filter(origin==1)%>%
+  select(-name)%>%
+  select(-origin)
+
+for(j in 1:length(mincenter)){
+  AutoData[,j+7]<-sapply(AutoData$mpg ,
+                         mincenter[j],
+                         minspread,
+                         FUN = gauss)
+}
+AutoData<-AutoData%>%
+  select(starts_with("V"),displacement,mpg)
+
+model<-glm(displacement~.,data=AutoData)
+
+AutoData<-AutoData %>%
+        mutate(predictions=predict.glm(model,newdata=AutoData))
+
+ggplot(data=AutoData,aes(x=mpg,y=displacement))+
+  geom_point()+
+  geom_line(aes(y=predictions),color="red")
+```
+
+

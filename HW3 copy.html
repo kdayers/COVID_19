@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Kimberly Ayers - Homework 3</title>
+
+<script src="HW3_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="HW3_files/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="HW3_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="HW3_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="HW3_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="HW3_files/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="HW3_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="HW3_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="HW3_files/navigation-1.1/tabsets.js"></script>
+<script src="HW3_files/navigation-1.1/codefolding.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #0000ff; } /* Keyword */
+code > span.ch { color: #008080; } /* Char */
+code > span.st { color: #008080; } /* String */
+code > span.co { color: #008000; } /* Comment */
+code > span.ot { color: #ff4000; } /* Other */
+code > span.al { color: #ff0000; } /* Alert */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #008000; font-weight: bold; } /* Warning */
+code > span.cn { } /* Constant */
+code > span.sc { color: #008080; } /* SpecialChar */
+code > span.vs { color: #008080; } /* VerbatimString */
+code > span.ss { color: #008080; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { } /* Variable */
+code > span.cf { color: #0000ff; } /* ControlFlow */
+code > span.op { } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #ff4000; } /* Preprocessor */
+code > span.do { color: #008000; } /* Documentation */
+code > span.an { color: #008000; } /* Annotation */
+code > span.cv { color: #008000; } /* CommentVar */
+code > span.at { } /* Attribute */
+code > span.in { color: #008000; } /* Information */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Kimberly Ayers - Homework 3</h1>
+
+</div>
+
+
+<div id="notes-3-problem-1-fun-pca" class="section level1">
+<h1><span class="header-section-number">1</span> Notes 3 Problem 1 (Fun PCA)</h1>
+<p>Use your own image and reproduce plots similar to the Shelby images shown above. Try to find the fewest number of singular values so that you can reproduce the image without any loss of quality to the eye. You will notice that I did not give you the code above to actually reconstruct the reduced matrices. You need to think about how to do this by using the singular value decomposition.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">moose&lt;-<span class="kw">load.image</span>(<span class="st">&quot;/Users/kimberlyayers/Google Drive/Teaching/Spring20/Machine Learning/moose.jpeg&quot;</span>)
+moose_gray&lt;-<span class="kw">grayscale</span>(moose)
+<span class="kw">plot</span>(moose_gray)</code></pre></div>
+<p><img src="HW3_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Moose SVD</span>
+
+moose_matrix&lt;-<span class="kw">as.matrix</span>(moose_gray)
+moose_svd&lt;-<span class="kw">svd</span>(moose_matrix)
+
+<span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span><span class="op">:</span><span class="dv">1275</span>,<span class="dt">y=</span>moose_svd<span class="op">$</span>d<span class="op">/</span><span class="kw">sum</span>(moose_svd<span class="op">$</span>d)),<span class="dt">size=</span><span class="fl">0.25</span>,<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_log10</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Scree Plot&quot;</span>)</code></pre></div>
+<p><img src="HW3_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p&lt;-<span class="dv">100</span>
+Approx_Moose&lt;-moose_svd<span class="op">$</span>u[,<span class="dv">1</span><span class="op">:</span>p]<span class="op">%*%</span><span class="kw">diag</span>(moose_svd<span class="op">$</span>d[<span class="dv">1</span><span class="op">:</span>p])<span class="op">%*%</span><span class="kw">t</span>(moose_svd<span class="op">$</span>v[,<span class="dv">1</span><span class="op">:</span>p])
+
+<span class="kw">plot</span>(<span class="kw">as.cimg</span>(Approx_Moose))</code></pre></div>
+<p><img src="HW3_files/figure-html/unnamed-chunk-1-3.png" width="672" /> The above image was created with 100 dimensions, reduced from 1275.</p>
+</div>
+<div id="notes-3-problem-2-verify-the-properties-of-svd" class="section level1">
+<h1><span class="header-section-number">2</span> Notes 3 Problem 2 (Verify the Properties of SVD)</h1>
+<p>In this problem you will build a random matrix A and then use this to verify several of the properties of the singular value decomposition.</p>
+<div id="part-a" class="section level2">
+<h2><span class="header-section-number">2.1</span> Part a</h2>
+<p>Build a random matrix <span class="math inline">\(A\)</span> that is <span class="math inline">\(10\times5\)</span>. It is probably easiest to just draw random numbers from a uniform distribution (using <code>runif</code>) with minimum −1 and maximum 1. Once you have the matrix <span class="math inline">\(A\)</span>, build <span class="math inline">\(AA^T\)</span> and <span class="math inline">\(A^TA\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A&lt;-<span class="kw">matrix</span>(<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">5</span>)
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>){
+    A[i,]&lt;-<span class="kw">runif</span>(<span class="dv">5</span>,<span class="dt">min=</span><span class="op">-</span><span class="dv">1</span>,<span class="dt">max=</span><span class="dv">1</span>)
+}
+aat&lt;-A<span class="op">%*%</span><span class="kw">t</span>(A)
+ata&lt;-<span class="kw">t</span>(A)<span class="op">%*%</span>A</code></pre></div>
+</div>
+<div id="part-b" class="section level2">
+<h2><span class="header-section-number">2.2</span> Part b</h2>
+<p>Verify that the nonzero eigenvalues of <span class="math inline">\(AA^T\)</span> are the same as the nonzero eigenvalues of <span class="math inline">\(A^TA\)</span>. There will be some numerical noise here – you may find that some of the non-zero eigenvalues should actually be interpreted as zeros.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ataeig&lt;-<span class="kw">eigen</span>(ata)
+aateig&lt;-<span class="kw">eigen</span>(aat)
+
+ataeig<span class="op">$</span>values</code></pre></div>
+<pre><code>## [1] 8.2640687 6.1081652 2.2883048 1.7179068 0.4040359</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">aateig<span class="op">$</span>values</code></pre></div>
+<pre><code>##  [1]  8.264069e+00  6.108165e+00  2.288305e+00  1.717907e+00  4.040359e-01
+##  [6]  3.205161e-16  1.030838e-16 -3.402334e-16 -7.401789e-16 -8.621128e-16</code></pre>
+</div>
+<div id="part-c" class="section level2">
+<h2><span class="header-section-number">2.3</span> Part c</h2>
+<p>Verify that the eigenvectors of <span class="math inline">\(AA^T\)</span> are indeed perpendicular to each other.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">atavec&lt;-ataeig<span class="op">$</span>vectors
+aatvec&lt;-aateig<span class="op">$</span>vectors
+dotsaat&lt;-<span class="kw">matrix</span>(<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">10</span>)
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>){
+  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>){
+    dotsaat[i,j]&lt;-<span class="kw">dot</span>(aatvec[,i],aatvec[,j])
+  }
+}
+
+<span class="kw">norm</span>(dotsaat<span class="op">-</span><span class="kw">diag</span>(<span class="dv">10</span>),<span class="st">&quot;f&quot;</span>)</code></pre></div>
+<pre><code>## [1] 2.0248e-15</code></pre>
+</div>
+<div id="part-d" class="section level2">
+<h2><span class="header-section-number">2.4</span> Part d</h2>
+<p>Verify that the eigenvectors of <span class="math inline">\(A^TA\)</span> are indeed perpendicular to each other.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dotsata&lt;-<span class="kw">matrix</span>(<span class="dv">0</span>,<span class="dv">5</span>,<span class="dv">5</span>)
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>){
+  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>){
+    dotsata[i,j]&lt;-<span class="kw">dot</span>(atavec[,i],atavec[,j])
+  }
+}
+<span class="kw">norm</span>(dotsata<span class="op">-</span><span class="kw">diag</span>(<span class="dv">5</span>),<span class="st">&quot;f&quot;</span>)</code></pre></div>
+<pre><code>## [1] 1.147336e-15</code></pre>
+</div>
+<div id="part-e" class="section level2">
+<h2><span class="header-section-number">2.5</span> Part e</h2>
+<p>Build the matrices U and D1. Verify that <span class="math inline">\(AA^T=UD_1U^T\)</span>. You should verify this by calculating the norm of the difference between the two matrices: <span class="math display">\[||AA^T-UD_1U^T||_2\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">U&lt;-aatvec
+D1&lt;-<span class="kw">diag</span>(aateig<span class="op">$</span>values)
+<span class="kw">norm</span>(aat<span class="op">-</span>U<span class="op">%*%</span>D1<span class="op">%*%</span><span class="kw">t</span>(U),<span class="st">&quot;F&quot;</span>)</code></pre></div>
+<pre><code>## [1] 1.771658e-14</code></pre>
+</div>
+<div id="part-f" class="section level2">
+<h2><span class="header-section-number">2.6</span> Part f</h2>
+<p>Build the matrices V and D2. Verify that <span class="math inline">\(A^TA=VD_2V^T\)</span>. You should verify this by calculating the norm of the difference between the two matrices: <span class="math display">\[||A^TA-VD_2V^T||_2\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">V&lt;-atavec
+D2&lt;-<span class="kw">diag</span>(ataeig<span class="op">$</span>values)
+<span class="kw">norm</span>(ata<span class="op">-</span>V<span class="op">%*%</span>D2<span class="op">%*%</span><span class="kw">t</span>(V),<span class="st">&quot;F&quot;</span>)</code></pre></div>
+<pre><code>## [1] 2.903862e-14</code></pre>
+</div>
+<div id="part-g" class="section level2">
+<h2><span class="header-section-number">2.7</span> Part g</h2>
+<p>Now use the <code>svd</code> command in <code>R</code> to build the singular value decomposition in the most efficient way. Put your <span class="math inline">\(U\)</span> matrix from part (e) along side your U matrix from the svd command. You should notice a size discrepency. Why? What smart thing has <code>R</code> done here and why did they do it?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">singvalA&lt;-<span class="kw">svd</span>(A)
+U</code></pre></div>
+<pre><code>##              [,1]        [,2]        [,3]        [,4]        [,5]
+##  [1,]  0.25201237 -0.16289992  0.60603359 -0.30990712 -0.13182673
+##  [2,]  0.01235359  0.42423075  0.25549126 -0.08733060  0.15387072
+##  [3,] -0.42347279 -0.20353399  0.12494496  0.44956596  0.51456884
+##  [4,]  0.23835363 -0.30623566  0.06983668 -0.29715453  0.08346714
+##  [5,] -0.54389196 -0.19700717  0.06811506 -0.14255007 -0.60114166
+##  [6,]  0.10556809 -0.53310784 -0.20510023  0.35449508 -0.18288877
+##  [7,]  0.02309418  0.11497094  0.50185161  0.53604147 -0.39988471
+##  [8,] -0.50463703  0.02320574 -0.15747517 -0.37035454 -0.05645843
+##  [9,]  0.29284665  0.30676440 -0.46840909  0.16292280 -0.35813635
+## [10,] -0.22865122  0.47687369  0.06475180  0.09426833 -0.03195455
+##              [,6]        [,7]        [,8]          [,9]       [,10]
+##  [1,]  0.00000000 -0.54436730  0.00000000  0.3645822376  0.00000000
+##  [2,] -0.10670410  0.13827138 -0.69947870 -0.0558230043  0.44766690
+##  [3,]  0.26393949 -0.42908497 -0.02531242 -0.0783865343  0.19020962
+##  [4,]  0.12545587 -0.11595966 -0.18091628 -0.8132292872 -0.16125798
+##  [5,]  0.46174312  0.11001096 -0.21926764  0.0004322489  0.07517068
+##  [6,] -0.41479944 -0.07201562 -0.53178378  0.1574347380 -0.13654939
+##  [7,] -0.26941767  0.08423423  0.25443171 -0.3619711690  0.10819039
+##  [8,] -0.63572289 -0.30230176  0.15015436 -0.1656449230  0.18477009
+##  [9,]  0.20213124 -0.55574514 -0.02562026 -0.1075420701  0.28981459
+## [10,] -0.01895323 -0.24972313 -0.24196616 -0.0408009038 -0.76372541</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">singvalA<span class="op">$</span>u</code></pre></div>
+<pre><code>##              [,1]        [,2]        [,3]        [,4]        [,5]
+##  [1,] -0.25201237  0.16289992  0.60603359  0.30990712 -0.13182673
+##  [2,] -0.01235359 -0.42423075  0.25549126  0.08733060  0.15387072
+##  [3,]  0.42347279  0.20353399  0.12494496 -0.44956596  0.51456884
+##  [4,] -0.23835363  0.30623566  0.06983668  0.29715453  0.08346714
+##  [5,]  0.54389196  0.19700717  0.06811506  0.14255007 -0.60114166
+##  [6,] -0.10556809  0.53310784 -0.20510023 -0.35449508 -0.18288877
+##  [7,] -0.02309418 -0.11497094  0.50185161 -0.53604147 -0.39988471
+##  [8,]  0.50463703 -0.02320574 -0.15747517  0.37035454 -0.05645843
+##  [9,] -0.29284665 -0.30676440 -0.46840909 -0.16292280 -0.35813635
+## [10,]  0.22865122 -0.47687369  0.06475180 -0.09426833 -0.03195455</code></pre>
+<p><code>R</code> has made <span class="math inline">\(U\)</span> a <span class="math inline">\(10\times 5\)</span> matrix, rather than <span class="math inline">\(10\times 10\)</span>. This is smart because generally speaking in singular value the bottom <span class="math inline">\(n-p\)</span> rows are all zero anyway. Making <span class="math inline">\(U\)</span> <span class="math inline">\(10\times 5\)</span> allows us to treat <span class="math inline">\(\Sigma\)</span> as a square diagonal matrix.</p>
+</div>
+<div id="part-e-1" class="section level2">
+<h2><span class="header-section-number">2.8</span> Part e</h2>
+<p>Rebuild the <span class="math inline">\(A\)</span> matrix from the <span class="math inline">\(U\)</span>, <span class="math inline">\(\Sigma\)</span>, and <span class="math inline">\(V\)</span> that are produced from the <code>svd</code> command. You should verify that indeed you recover the <span class="math inline">\(A\)</span> matrix by calculating the norm of the difference <span class="math inline">\(‖A−U\Sigma V^T‖_2\)</span>. The norm of the difference is likely not exactly 0 but it should be darn close.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(singA&lt;-singvalA<span class="op">$</span>u<span class="op">%*%</span><span class="kw">diag</span>(singvalA<span class="op">$</span>d)<span class="op">%*%</span><span class="kw">t</span>(singvalA<span class="op">$</span>v))</code></pre></div>
+<pre><code>##              [,1]       [,2]        [,3]        [,4]         [,5]
+##  [1,] -0.04762177 -0.2932125  0.61064802 -0.80967349 -0.763342922
+##  [2,]  0.46002528  0.7738259  0.12009364  0.33438393 -0.579596527
+##  [3,]  0.86356739 -0.9198908 -0.37336306  0.43583289  0.551033504
+##  [4,] -0.44212765 -0.2853289  0.35885780 -0.89572041 -0.003444003
+##  [5,]  0.47109547 -0.9954751  0.49322855  0.99355236  0.655700773
+##  [6,] -0.62812274 -0.9999887 -0.43712919 -0.64796164  0.385059982
+##  [7,]  0.32225923 -0.2673155 -0.40487886  0.18773615 -0.919358781
+##  [8,]  0.54688124 -0.2331402  0.54859837  0.99813638  0.866488084
+##  [9,] -0.76752997  0.9794371 -0.51855377  0.04660143 -0.252087786
+## [10,]  0.62345332  0.6429403 -0.09307248  0.99308186 -0.222347705</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">norm</span>(A<span class="op">-</span>singA,<span class="st">&quot;f&quot;</span>)</code></pre></div>
+<pre><code>## [1] 3.705993e-15</code></pre>
+</div>
+</div>
+<div id="notes-4-problem-3" class="section level1">
+<h1><span class="header-section-number">3</span> Notes 4 Problem 3</h1>
+<p>Time for an experiment. We are going to build simulated data that is modeled by the quadratic function <span class="math inline">\(f(x)=x−2x^2\)</span> on the domain <span class="math inline">\(x\in[0,2]\)</span>. To make things interesting we’re going to build some noise with mean 0 and standard deviation 0.5 into the data too. Go ahead and use the code below to build 1000 such data points.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">num_pts &lt;-<span class="st"> </span><span class="dv">1000</span>
+x &lt;-<span class="st"> </span><span class="kw">runif</span>(num_pts, <span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">2</span>)
+y &lt;-<span class="st"> </span>x <span class="op">-</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span>x<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(num_pts, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="fl">0.5</span>)
+df=<span class="kw">data.frame</span>(x,y)
+<span class="kw">ggplot</span>(<span class="dt">data=</span>df,<span class="kw">aes</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<p><img src="HW3_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<div id="part-a-1" class="section level2">
+<h2><span class="header-section-number">3.1</span> Part a</h2>
+<p>Randomly take 200 of the 1000 points and save them off for later use as a validation set.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">random&lt;-<span class="kw">sample</span>(<span class="kw">nrow</span>(df),<span class="dv">200</span>)
+sampledf&lt;-df[random,]
+traindf&lt;-df[<span class="op">-</span>random,]</code></pre></div>
+</div>
+<div id="part-b-1" class="section level2">
+<h2><span class="header-section-number">3.2</span> Part b</h2>
+<p>Build linear, quadratic, cubic, quartic, and quintic regression models on the 800 training datapoints. Do LOOCV, 5-folds cross validation, and 10-folds cross validation for each model to approximate the testing error rate.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LOOCV&lt;-<span class="kw">c</span>()
+fold5&lt;-<span class="kw">c</span>()
+fold10&lt;-<span class="kw">c</span>()
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>){
+  LOOCV_mse&lt;-<span class="kw">c</span>()
+  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">800</span>){
+    dfs&lt;-df[<span class="op">-</span>j,]
+    model&lt;-<span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(x,i), <span class="dt">data=</span>dfs)
+    <span class="co">#dynamic memory allocation</span>
+    LOOCV_mse[j]&lt;-(dfs<span class="op">$</span>y[j]<span class="op">-</span><span class="kw">predict.lm</span>(model,dfs[j,]))<span class="op">^</span><span class="dv">2</span>
+    LOOCV[i]&lt;-<span class="kw">mean</span>(LOOCV_mse)
+  }
+  
+    <span class="co">#5-Fold</span>
+  folds&lt;-<span class="kw">createFolds</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(traindf),<span class="dt">k=</span><span class="dv">5</span>,<span class="dt">returnTrain=</span><span class="ot">TRUE</span>)
+  fold5_mse&lt;-<span class="kw">c</span>()
+  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>){
+    df2&lt;-traindf[folds[[j]],]
+    model&lt;-<span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(x,i), <span class="dt">data=</span>df2)
+    <span class="co">#dynamic memory allocation</span>
+    fold5_mse[j] &lt;-<span class="st"> </span><span class="kw">mean</span>( (traindf<span class="op">$</span>y[<span class="op">-</span>folds[[j]]] <span class="op">-</span><span class="st"> </span>
+<span class="st">                           </span><span class="kw">predict.lm</span>(model, traindf[<span class="op">-</span>folds[[j]],]))<span class="op">^</span><span class="dv">2</span>)
+    fold5[i]&lt;-<span class="kw">mean</span>(fold5_mse)
+  }
+  
+    folds2&lt;-<span class="kw">createFolds</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(traindf),<span class="dt">k=</span><span class="dv">10</span>,<span class="dt">returnTrain=</span><span class="ot">TRUE</span>)
+  fold10_mse&lt;-<span class="kw">c</span>()
+  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>){
+    df2&lt;-traindf[folds2[[j]],]
+    model&lt;-<span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(x,i), <span class="dt">data=</span>df2)
+    <span class="co">#dynamic memory allocation</span>
+    fold10_mse[j] &lt;-<span class="st"> </span><span class="kw">mean</span>( (traindf<span class="op">$</span>y[<span class="op">-</span>folds2[[j]]] <span class="op">-</span><span class="st"> </span>
+<span class="st">                           </span><span class="kw">predict.lm</span>(model, traindf[<span class="op">-</span>folds2[[j]],]))<span class="op">^</span><span class="dv">2</span>)
+    fold10[i]&lt;-<span class="kw">mean</span>(fold10_mse)
+  }
+  
+}
+<span class="kw">ggplot</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,<span class="dt">y=</span>LOOCV),<span class="dt">color=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,<span class="dt">y=</span>fold5),<span class="dt">color=</span><span class="st">&quot;blue&quot;</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,<span class="dt">y=</span>fold10),<span class="dt">color=</span><span class="st">&quot;green&quot;</span>)</code></pre></div>
+<p><img src="HW3_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+<div id="part-c-1" class="section level2">
+<h2><span class="header-section-number">3.3</span> Part c</h2>
+<p>Since for the quadratic, cubic, quartic, and quintic, the MSE is roughly the same (given the same cross-validation method), we should use the least complex model, the quadratic.</p>
+</div>
+<div id="part-d-1" class="section level2">
+<h2><span class="header-section-number">3.4</span> Part d</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mse&lt;-<span class="kw">c</span>()
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>){
+  model1&lt;-<span class="kw">glm</span>(y<span class="op">~</span><span class="kw">poly</span>(x,i),<span class="dt">data=</span>df)
+  mse[i]&lt;-<span class="kw">mean</span>((df<span class="op">$</span>y<span class="op">-</span><span class="kw">predict.lm</span>(model1,df))<span class="op">^</span><span class="dv">2</span>)
+}
+<span class="kw">ggplot</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,<span class="dt">y=</span>mse))</code></pre></div>
+<p><img src="HW3_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mse[<span class="dv">2</span>]<span class="op">-</span>fold5[<span class="dv">2</span>]</code></pre></div>
+<pre><code>## [1] -0.005434222</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mse[<span class="dv">2</span>]<span class="op">-</span>fold10[<span class="dv">2</span>]</code></pre></div>
+<pre><code>## [1] -0.00581681</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mse[<span class="dv">2</span>]<span class="op">-</span>LOOCV[<span class="dv">2</span>]</code></pre></div>
+<pre><code>## [1] -0.007753877</code></pre>
+<p>LOOCV does the best job at estimating the MSE, but 5-fold and 10-fold do a decent job as well.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "HW3_files/mathjax-local/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+---
+title: "HW2"
+output:
+  html_document: 
+    mathjax: local
+    self_contained: false
+    toc: true
+    toc_float: true
+    header-includes:  \usepackage{amsmath}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(MASS)
+library(tidyverse)
+```
+
+# Problem 4
+
+From the MASS package load the Boston dataset. (Remember that the MASS package has a select command just like the tidyverse, so if you are going to use the tidyverse select command you need to load tidyverse last.)
+
+
+## Part A
+Start by building a model for the median household value (medv) as explained by everything else in the dataset. Save this model so you can compare the coefficients in future steps of this problem.
+
+```{r}
+model<-lm(medv~.,data=Boston)
+summary(model)
+```
+
+## Part B
+Explicitly build the normal equations and use them to find the coefficients for the linear model. Compare to what you found in part 1. Be sure to include your code in your writeup.
+
+```{r pressure, echo=TRUE}
+X<-matrix(nrow=nrow(Boston),ncol=ncol(Boston))
+
+y<-Boston$medv
+X[,1]<-rep(1)
+for(j in 1:13){
+  X[,j+1]<-Boston[,j]
+}
+A<-t(X)%*%X
+b<-t(X)%*%y
+beta<-solve(A,b)
+beta
+norm(beta-model$coefficients,"f")
+```
+## Part C
+Find the eigenvalues of the matrix XTX and compute the ratio between the largest and the smallest eigenvalues. This ratio is called the condition number of the matrix XTX (technically the condition number is the square root of this ratio, but we don’t need the root here). The condition number in this case should be huge! What does this number mean about the matrix XTX? (Hint: think about what it means geometrically for the ratio of largest to smallest eigenvalues to be very very large)
+```{r}
+evalA<-eigen(A)
+condA<-max(evalA$values)/min(evalA$values)
+condA
+
+```
+## Part D
+Now pre-process the predictors by doing a z transformation on each. Recall that
+$$z_j=\frac{x_j-\overline{x_j}}{\sigma_{x_j}}$$
+
+
+### Part i 
+Perform this pre-processing on the data and build the normal equations from this pre-processed data. What does the condition number tell you?
+```{r}
+Z<-X
+for(j in 1:13){
+  #Z[,j+1]<-scale(Boston[,j])
+  Z[,j+1]<-(X[,j+1]-mean(X[,j+1]))/sd(X[,j+1])
+}
+B<-t(Z)%*%Z
+evalB<-eigen(B)
+condB<-max(evalB$values)/min(evalB$values)
+condB
+```
+
+###Part ii
+Show that you can reverse this transformation to arrive back at the model from the non-processed data.
+\begin{align}
+y &= \alpha_0+\alpha_1 z_1+\cdots+\alpha_pz_p\\
+&=\alpha_0+\alpha_1\frac{x_1-\overline{x_1}}{\sigma_{x_1}}+\cdots+\alpha_p\frac{x_p-\overline{x_p}}{\sigma_{x_p}}\\
+&=\alpha_0-\sum_{i=1}^p\frac{\overline{x_i}}{\sigma_{x_i}}+\frac{\alpha_1}{\sigma_{x_1}}x_1+\cdots\frac{\alpha_p}{\sigma_{x_p}}x_p
+\end{align}
+Thus, letting $$\beta_0=\alpha_0-\sum_{i=1}^p\frac{\overline{x_i}}{\sigma_{x_i}}$$ and  $$\beta_i=\frac{\alpha_i}{\sigma_{x_i}}$$ for $i=1,\ldots,p$ gets back at the model for the pre-processed model. 
+
+
+## Part E
+The z transformation is not the only type of pre-processing that you could do. We can also pre-process our data so that every predictor has a minimum of 0 and a maximum of 1. This will force every predictor to live on the unit interval. The logic here is that we give every predictor the same range instead of the same mean and standard deviation. We’ll call this the unit transformation
+$$u_j=\frac{x_j}{\text{max}(x_j)-\text{min}(x_j)}$$
+
+### Part i 
+Perform this pre-processing on the data and build the normal equations for this pre-processed data. Again, what does the condition number tell you?
+```{r}
+W<-X
+for(j in 1:13){
+  W[,j+1]<-(X[,j+1])/(max(X[,j+1])-min(X[,j+1]))
+}
+C<-t(W)%*%W
+evalC<-eigen(C)
+condC<-max(evalC$values)/min(evalC$values)
+condC
+```
+
+### Part ii
+Show that you can reverse this transformation to arrive back at the model for the non-processed data.
+
+
+##Part F
+At first glance it may appear that the model coefficients that you found in parts a, b, d, and e are all the same, but they are not if you look at all of the decimal places! Determine which collection of coefficients most closely matches the coefficients from R’s lm command. (be sure to do apples-to-apples comparisons)
+
+##Part G
+Summarize what we’ve done in this problem. Why is pre-processing important, and for this particular problem which type of pre-processing is the best?

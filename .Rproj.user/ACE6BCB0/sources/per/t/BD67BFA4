@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1583351481795.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4243272915",
+    "id" : "BD67BFA4",
+    "lastKnownWriteTime" : 1581022448,
+    "last_content_update" : 1581022448,
+    "path" : "~/Google Drive/Research/Stochastic Perturbations/schmelcerdet.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

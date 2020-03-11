@@ -1,0 +1,271 @@
+---
+title: "Kimberly Ayers - Homework 3"
+output:
+  html_document: 
+#    mathjax: local
+    theme: readable
+    highlight: haddock
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: hide
+    header-includes:  \usepackage{amsmath}
+#    self_contained: FALSE
+---
+#Notes 3 Problem 1 (Fun PCA)
+Use your own image and reproduce plots similar to the Shelby images shown above. Try to find the fewest number of singular values so that you can reproduce the image without any loss of quality to the eye. You will notice that I did not give you the code above to actually reconstruct the reduced matrices. You need to think about how to do this by using the singular value decomposition.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(imager)
+library(tidyverse)
+library(pracma)
+library(caret)
+```
+```{r}
+moose<-load.image("/Users/kimberlyayers/Google Drive/Teaching/Spring20/Machine Learning/moose.jpeg")
+moose_gray<-grayscale(moose)
+plot(moose_gray)
+
+#Moose SVD
+
+moose_matrix<-as.matrix(moose_gray)
+moose_svd<-svd(moose_matrix)
+
+ggplot() +
+  geom_point(aes(x=1:1275,y=moose_svd$d/sum(moose_svd$d)),size=0.25,color="blue")+
+  scale_y_log10()+
+  labs(title="Scree Plot")
+
+p<-100
+Approx_Moose<-moose_svd$u[,1:p]%*%diag(moose_svd$d[1:p])%*%t(moose_svd$v[,1:p])
+
+plot(as.cimg(Approx_Moose))
+```
+The above image was created with 100 dimensions, reduced from 1275. 
+
+# Notes 3 Problem 2 (Verify the Properties of SVD)
+In this problem you will build a random matrix A and then use this to verify several of the properties of the singular value decomposition.
+
+##Part a
+Build a random matrix $A$ that is $10\times5$. It is probably easiest to just draw random numbers from a uniform distribution (using `runif`) with minimum −1 and maximum 1. Once you have the matrix $A$, build $AA^T$ and $A^TA$.
+```{r}
+A<-matrix(0,10,5)
+for (i in 1:10){
+    A[i,]<-runif(5,min=-1,max=1)
+}
+aat<-A%*%t(A)
+ata<-t(A)%*%A
+```
+
+##Part b
+
+Verify that the nonzero eigenvalues of $AA^T$ are the same as the nonzero eigenvalues of $A^TA$. There will be some numerical noise here – you may find that some of the non-zero eigenvalues should actually be interpreted as zeros.
+
+```{r}
+ataeig<-eigen(ata)
+aateig<-eigen(aat)
+
+ataeig$values
+aateig$values
+
+
+
+```
+## Part c
+Verify that the eigenvectors of $AA^T$ are indeed perpendicular to each other.
+```{r}
+atavec<-ataeig$vectors
+aatvec<-aateig$vectors
+dotsaat<-matrix(0,10,10)
+for (i in 1:10){
+  for (j in 1:10){
+    dotsaat[i,j]<-dot(aatvec[,i],aatvec[,j])
+  }
+}
+
+norm(dotsaat-diag(10),"f")
+```
+
+
+##Part d
+Verify that the eigenvectors of $A^TA$ are indeed perpendicular to each other.
+```{r}
+
+
+dotsata<-matrix(0,5,5)
+for (i in 1:5){
+  for (j in 1:5){
+    dotsata[i,j]<-dot(atavec[,i],atavec[,j])
+  }
+}
+norm(dotsata-diag(5),"f")
+```
+
+##Part e
+Build the matrices U and D1. Verify that $AA^T=UD_1U^T$. You should verify this by calculating the norm of the difference between the two matrices:
+$$||AA^T-UD_1U^T||_2$$
+
+```{r}
+U<-aatvec
+D1<-diag(aateig$values)
+norm(aat-U%*%D1%*%t(U),"F")
+```
+
+##Part f
+Build the matrices V and D2. Verify that $A^TA=VD_2V^T$. You should verify this by calculating the norm of the difference between the two matrices:
+$$||A^TA-VD_2V^T||_2$$
+```{r}
+V<-atavec
+D2<-diag(ataeig$values)
+norm(ata-V%*%D2%*%t(V),"F")
+```
+
+##Part g
+Now use the `svd` command in `R` to build the singular value decomposition in the most efficient way. Put your $U$ matrix from part (e) along side your U matrix from the svd command. You should notice a size discrepency. Why? What smart thing has `R` done here and why did they do it?
+```{r}
+singvalA<-svd(A)
+U
+singvalA$u
+
+```
+`R` has made $U$ a $10\times 5$ matrix, rather than $10\times 10$.  This is smart because generally speaking in singular value the bottom $n-p$ rows are all zero anyway.  Making $U$ $10\times 5$ allows us to treat $\Sigma$ as a square diagonal matrix.
+
+##Part e
+Rebuild the $A$ matrix from the $U$, $\Sigma$, and $V$ that are produced from the `svd` command. You should verify that indeed you recover the $A$ matrix by calculating the norm of the difference $‖A−U\Sigma V^T‖_2$. The norm of the difference is likely not exactly 0 but it should be darn close.
+
+```{r}
+(singA<-singvalA$u%*%diag(singvalA$d)%*%t(singvalA$v))
+norm(A-singA,"f")
+```
+
+#Notes 4 Problem 2
+
+Reproduce Figure 5.4 on page 180 from ISLR. Obviously since there is some randomness in the $k$-folds cross validation procedure you will not be able to do an exact replication of the right-hand pane of the plot. However, the LOOCV plot should be the same. Be sure to have your code hidden in your HTML as usual … I’ll be looking at it this time.
+```{r}
+rm(list=ls())
+library(ISLR)
+LOOCV<-c()
+fold10<-c()
+Auto<-Auto
+for (i in 1:10){
+  LOOCV_mse<-c()
+  for (j in 1:nrow(Auto)){
+    df<-Auto[-j,]
+    model<-lm(mpg ~ poly(horsepower,i), data=df)
+    #dynamic memory allocation
+    LOOCV_mse[j]<-(Auto$mpg[j]-predict.lm(model,Auto[j,]))^2
+    LOOCV[i]<-mean(LOOCV_mse)
+  }
+
+
+  folds<-createFolds(1:nrow(Auto),k=10,returnTrain=TRUE)
+  fold10_mse<-c()
+  for (j in 1:10){
+    AutoFold<-Auto[folds[[j]],]
+    model<-glm(mpg ~ poly(horsepower,i), data=AutoFold)
+    #dynamic memory allocation
+    fold10_mse[j] <- mean( (Auto$mpg[-folds[[j]]] - 
+                           predict.lm(model, Auto[-folds[[j]],]))^2)
+    fold10[i]<-mean(fold10_mse)
+  }
+}
+
+ggplot()+
+  geom_path(aes(x=1:10,y=LOOCV))
+
+ggplot()+
+  geom_path(aes(x=1:10,y=fold10),color="red")
+```
+
+
+
+
+#Notes 4 Problem 3
+Time for an experiment. We are going to build simulated data that is modeled by the quadratic function $f(x)=x−2x^2$ on the domain $x\in[0,2]$. To make things interesting we’re going to build some noise with mean 0 and standard deviation 0.5 into the data too. Go ahead and use the code below to build 1000 such data points.
+
+```{r}
+num_pts <- 1000
+x <- runif(num_pts, min=0, max=2)
+y <- x - 2*x^2 + rnorm(num_pts, mean=0, sd=0.5)
+df=data.frame(x,y)
+ggplot(data=df,aes(x=x,y=y))+
+  geom_point()
+```
+
+## Part a
+Randomly take 200 of the 1000 points and save them off for later use as a validation set.
+```{r}
+random<-sample(nrow(df),200)
+sampledf<-df[random,]
+traindf<-df[-random,]
+```
+
+##Part b
+Build linear, quadratic, cubic, quartic, and quintic regression models on the 800 training datapoints. Do LOOCV, 5-folds cross validation, and 10-folds cross validation for each model to approximate the testing error rate.
+```{r}
+LOOCV<-c()
+fold5<-c()
+fold10<-c()
+for (i in 1:5){
+  LOOCV_mse<-c()
+  for (j in 1:800){
+    dfs<-df[-j,]
+    model<-lm(y ~ poly(x,i), data=dfs)
+    #dynamic memory allocation
+    LOOCV_mse[j]<-(dfs$y[j]-predict.lm(model,dfs[j,]))^2
+    LOOCV[i]<-mean(LOOCV_mse)
+  }
+  
+    #5-Fold
+  folds<-createFolds(1:nrow(traindf),k=5,returnTrain=TRUE)
+  fold5_mse<-c()
+  for (j in 1:5){
+    df2<-traindf[folds[[j]],]
+    model<-glm(y ~ poly(x,i), data=df2)
+    #dynamic memory allocation
+    fold5_mse[j] <- mean( (traindf$y[-folds[[j]]] - 
+                           predict.lm(model, traindf[-folds[[j]],]))^2)
+    fold5[i]<-mean(fold5_mse)
+  }
+  
+  
+  #10-Fold
+    folds2<-createFolds(1:nrow(traindf),k=10,returnTrain=TRUE)
+  fold10_mse<-c()
+  for (j in 1:10){
+    df2<-traindf[folds2[[j]],]
+    model<-glm(y ~ poly(x,i), data=df2)
+    #dynamic memory allocation
+    fold10_mse[j] <- mean( (traindf$y[-folds2[[j]]] - 
+                           predict.lm(model, traindf[-folds2[[j]],]))^2)
+    fold10[i]<-mean(fold10_mse)
+  }
+  
+}
+ggplot()+
+  geom_point(aes(x=1:5,y=LOOCV),color="red")+
+  geom_point(aes(x=1:5,y=fold5),color="blue")+
+  geom_point(aes(x=1:5,y=fold10),color="green")
+```
+
+
+## Part c
+Since for the quadratic, cubic, quartic, and quintic, the MSE is roughly the same (given the same cross-validation method), we should use the least complex model, the quadratic.
+
+## Part d
+
+```{r}
+mse<-c()
+for (i in 1:5){
+  model1<-glm(y~poly(x,i),data=df)
+  mse[i]<-mean((df$y-predict.lm(model1,df))^2)
+}
+ggplot()+
+  geom_point(aes(x=1:5,y=mse))
+
+mse[2]-fold5[2]
+mse[2]-fold10[2]
+mse[2]-LOOCV[2]
+
+```
+LOOCV does the best job at estimating the MSE, but 5-fold and 10-fold do a decent job as well.

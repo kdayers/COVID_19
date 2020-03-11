@@ -1,0 +1,174 @@
+---
+title: "Homework 5"
+author: "Kim Ayers"
+date: ""
+header_includes:
+- \usepackage{amsmath}
+- \usepackage{amssymb}
+- \usepackage{amsthm}
+- \usepackage{amsfonts}
+output: 
+  html_document:
+    theme: readable
+    highlight: haddock
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval=TRUE, message=FALSE, warning=FALSE, cache=TRUE)
+library(tidyverse)
+library(boot)
+library(caret)
+library(ISLR)
+library(rsq)
+library(class)
+```
+# Problem 1 - KNN with Wine Data Set
+In the `wine_quality_red` dataset we have several predictors that we want to use to predict the quality of wines where the quality measurement was given by an expert wine taster.
+
+## Part a
+
+Start by breaking the quality measurements into two bins: low quality and high quality. Do so in a way where there are roughly the same number of high quality wines as low quality wines. A table of the counts for each quality measurements is shown below.
+
+```{r}
+wine<-read.csv("winequality-red.csv")
+table(wine$quality)
+
+wine<- wine%>%
+  mutate(lowhigh=ifelse(quality>=6,"high","low"))
+
+for (i in 1:11){
+ wine[,i]<-scale(wine[,i])
+}
+```
+
+
+## Part b
+Use cross validation to build a KNN model to predict the quality of the wine. Write code to make a plot of the test error rate against $1/K$ and use this plot to choose the best value of $K$. Report your cross validation classification training error, the number of neighbors that you use to build this model, and which predictors that you used to build your model.
+
+```{r}
+minneigh<-1
+numneigh<-50
+kcosts<-data.frame(k=seq(minneigh,numneigh),
+                   meancost=rep(0,numneigh-minneigh+1))
+
+folds<-createFolds(1:nrow(wine),k=10,returnTrain=TRUE)
+costs<-rep(0,10)
+for (neigh in minneigh:numneigh){
+  for (j in 1:10){
+    winefold<-wine[folds[[j]],]
+    knn_model<-knn(
+      train=winefold%>%
+        select(-quality,-lowhigh),
+      test=wine[-folds[[j]],]%>%
+        select(-quality,-lowhigh),
+      cl=winefold$lowhigh,
+      k=neigh
+    )
+    testing<-wine[-folds[[j]],]%>%
+      mutate(QualityTest=knn_model)%>%
+      mutate(Correct=ifelse(QualityTest==lowhigh,0,1))
+    
+#    for (i in 1:nrow(testing)){
+ #     if (testing$SpeciesTest[i]==Testing$Species[i]){
+  #      testing$Correct[i]<-0
+  #    }
+   #   else {
+    #    testing$Correct[i]<-1
+    #  }
+   
+    
+    costs[j]<-mean(testing$Correct)
+  }
+  kcosts$meancost[neigh-minneigh+1]<-mean(costs)
+}
+
+kcosts<-kcosts%>%
+  mutate(krecip=1/k)
+
+#ggplot(data=kcosts,aes(x=k,y=meancost))+
+#  geom_line()+geom_point()+
+#  scale_x_reverse()
+
+ggplot(data=kcosts,aes(x=krecip,y=meancost))+
+  geom_line()+geom_point()
+
+kcostsarr<-kcosts%>%
+  arrange(meancost)
+
+```
+
+## Part c
+
+Now perform PCA on the wine data predictors. Use the singular values to reduce the dimension of the problem and build a KNN model on the reduced data. Use cross validation to estimate the classification testing error of your model. Write code to make a plot of the test error rate against $1/K$ and use this plot to choose the best value of $K$. Report the estimated error, the number of neighbors, and the dimension that you use to build your model.
+
+
+```{r}
+X<-as.matrix(wine[,1:11])
+
+for (j in 1:11){
+  X[,j]<-X[,j]-mean(X[,j])
+}
+
+svdX<-svd(X)
+
+explained_variance<-svdX$d/sum(svdX$d)
+
+cumsum(explained_variance)
+
+ggplot()+
+  geom_col(aes(x=1:(ncol(wine)-2),y=explained_variance),fill="purple",color="red")
+
+p=4
+ U<-svdX$u[,1:p]          
+numneigh<-50
+kcosts<-data.frame(k=seq(1,numneigh),
+                   meancost=rep(0,numneigh))
+
+
+for (neigh in 1:numneigh){
+  folds<-createFolds(1:nrow(wine),k=10,returnTrain=TRUE)
+  costs<-rep(0,10)
+  for (j in 1:10){
+    winefold<-wine[folds[[j]],]
+    knn_model<-knn(
+      train=U[folds[[j]],],
+      test=U[-folds[[j]],],
+      cl=winefold$lowhigh,
+      k=neigh
+    )
+    testing<-wine[-folds[[j]],]%>%
+      mutate(QualityTest=knn_model)%>%
+      mutate(Correct=ifelse(QualityTest==lowhigh,0,1))
+    
+    #    for (i in 1:nrow(testing)){
+    #     if (testing$SpeciesTest[i]==Testing$Species[i]){
+    #      testing$Correct[i]<-0
+    #    }
+    #   else {
+    #    testing$Correct[i]<-1
+    #  }
+    
+    
+    costs[j]<-1/nrow(testing)*sum(testing$Correct)
+  }
+  kcosts$meancost[neigh]<-mean(costs)
+}
+
+kcosts<-kcosts%>%
+  mutate(krecip=1/k)
+
+ggplot(data=kcosts,aes(x=krecip,y=meancost))+
+  geom_line()+geom_point()
+
+
+kcostsarr<-kcosts%>%
+  arrange(meancost)
+```
+
+
+
+

@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1582745691910.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1067367607",
+    "id" : "CB3BEA11",
+    "lastKnownWriteTime" : 1583351487,
+    "last_content_update" : 1583351487973,
+    "path" : "~/Google Drive/Teaching/Spring20/Machine Learning/HW5.Rmd",
+    "project_path" : "HW5.Rmd",
+    "properties" : {
+        "cursorPosition" : "21,12",
+        "last_setup_crc32" : "8D8DA7043160024c",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

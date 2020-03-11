@@ -1,0 +1,90 @@
+# Testing the algorithm proposed in Schmelcher and Diakonos, Phys. Rev.E, 1998
+# This scheme stabilizes an unstable fixed point.
+# We can use it to stabilize an unstable period-P point by writing it as a fixed point of f^P
+# The iteration is:
+# x_{k+1} = x_k +L*(f(x_k) - x_k)
+#######################
+
+a = 4  # parameter value
+fx = function(x){
+  f=runif(*x*(1-x)
+  return(f)
+}
+
+f3x = function(x,a){
+  f1=fx(x,a)
+  f2=fx(f1,a)
+  f3=fx(f2,a)
+  return(f3)
+}
+
+xinit = runif(1,0,1)  # random initial starting point
+#xinit = .25
+L = -.1   # the multiplier.  A negative L finds the initially unstable period-3 orbit (positive multiplier)
+
+# Find a fixed point
+numits = 500 
+x = xinit
+orbit = x
+for (i in 1:numits){
+  xnext = x + L*(fx(x,a)-x)
+  orbit = c(orbit,xnext)
+  x = xnext
+}
+
+par(mfrow = c(1,1))
+plot(0:numits,orbit, type ='l', main = 'Finding an unstable fixed point?')
+
+# Find a period 3 point
+x = xinit
+orbit2 = x
+for (i in 1:numits){
+  xnext = x + L*(f3x(x,a) -x)
+  orbit2 = c(orbit2,xnext)
+  x = xnext
+}
+
+plot(0:numits,orbit2, type ='l', main = 'Finding an unstable period three?')
+
+par(mfrow = c(1,1))
+xvals = seq(0,1,by = .01)
+orbits = c()
+for (k in 1:length(xvals)){
+  xinit = xvals[k]
+  x = xinit
+  this_orbit = x
+  for (i in 1:numits){
+    xnext = x + L*(f3x(x,a) -x)
+    this_orbit = c(this_orbit,xnext)
+    x = xnext
+  }
+  orbits = rbind(orbits,this_orbit)
+}
+plot(0:numits,orbits[1,],type =  'l',ylim=c(0,1))
+for (i in 2:length(orbits[,1])){
+  lines(0:numits,orbits[i,],col = 'black')
+}
+PeriodThreePointsFound = unique(orbits[,numits])
+
+## Finding Period Three orbit
+xinit = runif(1,0,1)
+InitHistory = xinit
+LengthHist = 3
+x=xinit
+for (i in 1:LengthHist){
+  xnext = fx(x,a)
+  InitHistory = c(InitHistory, xnext)
+  x = xnext
+}
+orbit =  InitHistory
+for (i in (LengthHist+1):numits){
+  fxnext=fx(x,a)
+  xnext = orbit[i-2] + L*(fxnext - orbit[i-2])
+  orbit = c(orbit,xnext)
+  x = xnext
+}
+range = seq((numits-100),numits,by = 1)
+plot(range,orbit[range],type = 'b',pch  = 20,col = 'blue',
+     xlab = expression(Iterates),ylab = expression(x_i))
+
+hist(orbit,breaks = 50)
