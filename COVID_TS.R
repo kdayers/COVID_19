@@ -2,7 +2,7 @@ rm(list=ls())
 library(tidyverse)
 library(cowplot)
 #https://github.com/datasets/covid-19/blob/master/time-series-19-covid-combined.csv
-today <- Sys.Date() # Get today's date
+today <- Sys.Date()-1 # Get today's date
 #todaymonth<-str_sub(today,7,7)
 #todayday<-str_sub(today,9,10)
 #x<-str_c(c("X",todaymonth),collapse="")
@@ -20,7 +20,7 @@ covid_ts_deaths<-read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVI
 
 dates<-c()
 for (i in 1:length(names(covid_ts_confirmed))-4){
-  dates[i]<-Sys.Date()-length(names(covid_ts_confirmed))+4+i
+  dates[i]<-18283+i-1
 }
 
 
