@@ -5,6 +5,8 @@ library(caret)
 library(class)
 library(e1071)
 
+
+#3/13/20
 wine<-read.csv("winequality-red.csv")%>%
   mutate(
     quality = as.factor(ifelse(quality<=5,"Low","High")))

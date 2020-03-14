@@ -5,16 +5,16 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "1067367607",
+    "hash" : "0",
     "id" : "CB3BEA11",
-    "lastKnownWriteTime" : 1583351487,
-    "last_content_update" : 1583351487973,
+    "lastKnownWriteTime" : 1583766845,
+    "last_content_update" : 1583766845419,
     "path" : "~/Google Drive/Teaching/Spring20/Machine Learning/HW5.Rmd",
     "project_path" : "HW5.Rmd",
     "properties" : {
-        "cursorPosition" : "21,12",
-        "last_setup_crc32" : "8D8DA7043160024c",
-        "scrollLine" : "0"
+        "cursorPosition" : "171,0",
+        "last_setup_crc32" : "",
+        "scrollLine" : "170"
     },
     "read_only" : false,
     "read_only_alternatives" : [

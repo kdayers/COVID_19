@@ -169,8 +169,6 @@ kcostsarr<-kcosts%>%
   arrange(meancost)
 ```
 
-# Problem 2
 
-## Part a
 
 
