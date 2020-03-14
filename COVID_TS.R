@@ -110,7 +110,7 @@ Italy <- country %>%
 # Pull China out of the original dataframe
 CountriesNotChina <- country %>% 
   filter(
-    Country.Region != "Mainland China"
+    Country.Region != "China"
   )
 
 
