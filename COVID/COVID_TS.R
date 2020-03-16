@@ -82,6 +82,9 @@ country<-country_original%>%
   rename(Confirmed=number.x,
          Recovered=number.y,
          Deaths=number)
+
+country<-country%>%
+  mutate(Open_cases=Confirmed-Recovered-Deaths)
                           
 
 # Pull out just the US
