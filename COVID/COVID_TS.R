@@ -192,3 +192,22 @@ png(paste("COVIDTimeSeries",paste(today,".png",sep=""),sep=""), width=1500, heig
 plot_grid(p1,p2,p3,p4,p5,p6)
 dev.off()
 
+
+US_States_confirmed<-covid_ts_confirmed%>%
+  filter(Country.Region=="US")%>%
+  select(-Country.Region)%>%
+  gather(key="Date",value="Confirmed",-Province.State, -Lat,-Long)
+
+US_States_recovered<-covid_ts_recovered%>%
+  filter(Country.Region=="US")%>%
+  select(-Country.Region)%>%
+  gather(key="Date",value="Recovered",-Province.State, -Lat,-Long)
+
+US_States_deaths<-covid_ts_deaths%>%
+  filter(Country.Region=="US")%>%
+  select(-Country.Region)%>%
+  gather(key="Date",value="Deaths",-Province.State, -Lat,-Long)
+
+
+Us_States<-left_join(US_States_confirmed,US_States_recovered,by=c("Province.State","Lat", "Long","Date")) 
+
